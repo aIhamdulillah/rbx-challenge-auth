@@ -37,9 +37,9 @@ async function authenticate(tfaCode, csrf, challengeMetadata, cookie) {
                 });
 
                 const encodedData = Buffer.from(jsonToEncode).toString('base64');
-                resolve(encodedData);
+                return resolve(encodedData);
             } else {
-                reject(response.body);
+                return reject(response.body);
             }
         });
     });
