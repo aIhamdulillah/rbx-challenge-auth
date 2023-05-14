@@ -2,7 +2,6 @@ const request = require("request");
 
 async function authenticate(tfaCode, csrf, challengeMetadata, cookie) {
     return new Promise((resolve, reject) => {
-        // roblox hides the real challengeId within the challenge metadata
         const decodedMetadata = Buffer.from(challengeMetadata, 'base64').toString('ascii');
         const jsonDecodedMetadata = JSON.parse(decodedMetadata);
 
@@ -37,7 +36,6 @@ async function authenticate(tfaCode, csrf, challengeMetadata, cookie) {
                     actionType: actionType
                 });
 
-                // to include within the headers of the new request
                 const encodedData = Buffer.from(jsonToEncode).toString('base64');
                 resolve(encodedData);
             } else {
@@ -48,3 +46,13 @@ async function authenticate(tfaCode, csrf, challengeMetadata, cookie) {
 }
 
 module.exports = { authenticate };
+
+/*
+Example usage:
+try {
+    const encodedData = await authenticate(2facode, csrftoken, challengeMetadata, cookie)
+    // retry request using 'encodedData' as the 'rblx-challenge-metadata' header, the original challengeId as the 'rblx-challenge-id' header, and the challengeType as 'rblx-challenge-type', usually is just "Generic".
+} catch (err) {
+    console.log(err)
+}
+*/
